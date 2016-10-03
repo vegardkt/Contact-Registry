@@ -8,21 +8,13 @@
         Title=".net Internal | Contact Registry" Height="640" Width="800">
     <Grid>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="25,25,0,0" TextWrapping="Wrap" Text="Welcome!" VerticalAlignment="Top" FontWeight="Bold" FontSize="40"/>
-        <ListView Margin="10,100,100,10.4" Name="lvUsers">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Surname" Width="120" DisplayMemberBinding="{Binding Surname}" />
-                    <GridViewColumn Header="Company" Width="80" DisplayMemberBinding="{Binding Age}" />
-                    <GridViewColumn Header="Phone" Width="80" DisplayMemberBinding="{Binding Age}" />
-                    <GridViewColumn Header="Mail" Width="150" DisplayMemberBinding="{Binding Mail}" />
-                    <GridViewColumn Header="Title" Width="100" DisplayMemberBinding="{Binding Mail}" />
-                </GridView>
-            </ListView.View>
+        <ListView Margin="10,100,100,10.4">
+            <DataGrid Name="dGrid" SelectionMode="Single" CanUserAddRows="False"/>
         </ListView>
         <Button x:Name="bAddContact" Content="Add" HorizontalAlignment="Left" Margin="700,135,0,0" VerticalAlignment="Top" Width="75" Click="bAddContact_Click"/>
-        <Button x:Name="bSaveContacts" Content="Save" HorizontalAlignment="Left" Margin="700,159,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="bDeleteContacts" Content="Delete" HorizontalAlignment="Left" Margin="700,183,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="bLogout" Content="Logout" HorizontalAlignment="Left" Margin="700,207,0,0" VerticalAlignment="Top" Width="75" Click="bLogout_Click"/>
+        <Button x:Name="bRefreshContacts" Content="Refresh" HorizontalAlignment="Left" Margin="700,159,0,0" VerticalAlignment="Top" Width="75" Click="bRefreshContacts_Click"/>
+        <Button x:Name="bDeleteContacts" Content="Delete" HorizontalAlignment="Left" Margin="700,183,0,0" VerticalAlignment="Top" Width="75" Click="bDeleteContacts_Click"/>
+        <Button x:Name="bLogout" Content="Logout" HorizontalAlignment="Left" Margin="700,579,0,0" VerticalAlignment="Top" Width="75" Click="bLogout_Click"/>
+        <Button x:Name="bEdit" Content="Edit" HorizontalAlignment="Left" Margin="700,208,0,0" VerticalAlignment="Top" Width="75" Click="bEdit_Click"/>
     </Grid>
 </Window>

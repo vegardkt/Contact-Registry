@@ -19,7 +19,7 @@
         <TextBox x:Name="tbPhone" HorizontalAlignment="Left" Height="23" Margin="130,110,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="tMail" HorizontalAlignment="Left" Margin="30,140,0,0" TextWrapping="Wrap" Text="Mail:" VerticalAlignment="Top"/>
         <TextBox x:Name="tbMail" HorizontalAlignment="Left" Height="23" Margin="130,140,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBlock x:Name="tTitle" HorizontalAlignment="Left" Margin="30,170,0,0" TextWrapping="Wrap" Text="title:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="tTitle" HorizontalAlignment="Left" Margin="30,170,0,0" TextWrapping="Wrap" Text="Title:" VerticalAlignment="Top"/>
         <TextBox x:Name="tbTitle" HorizontalAlignment="Left" Height="23" Margin="130,170,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
