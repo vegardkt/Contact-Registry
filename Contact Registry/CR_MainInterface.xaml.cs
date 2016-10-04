@@ -27,6 +27,13 @@ namespace Contact_Registry
         public CR_MainInterface()
         {
             InitializeComponent();
+            Loaded += CR_MainInterface_Loaded;
+        }
+
+        private void CR_MainInterface_Loaded(object sender, RoutedEventArgs e)
+        {
+            //TO-DO Create class that refreshes list!
+            refreshList();
         }
 
         private void bLogout_Click(object sender, RoutedEventArgs e)
@@ -43,7 +50,7 @@ namespace Contact_Registry
             fm.Show();
         }
 
-        private void bRefreshContacts_Click(object sender, RoutedEventArgs e)
+        public void refreshList()
         {
             try
             {
@@ -56,7 +63,7 @@ namespace Contact_Registry
                 SqlDataAdapter adapt = new SqlDataAdapter(cmd);
 
                 DataTable ds = new DataTable();
-                
+
                 adapt.Fill(ds);
                 mySQLConnection.Close();
                 ds.Columns.RemoveAt(0); //Remove the first column as this is simply the ID
@@ -83,13 +90,17 @@ namespace Contact_Registry
             }
         }
 
+        private void bRefreshContacts_Click(object sender, RoutedEventArgs e)
+        {
+            refreshList();
+        }
+
         private void bDeleteContacts_Click(object sender, RoutedEventArgs e)
         {
             
             if (dGrid.SelectedIndex != -1)
             {
                 DataRowView drv = (DataRowView)dGrid.SelectedItem;
-
 
                 string delName = drv[0].ToString().Trim();
                 string delSurname = drv[1].ToString().Trim();
@@ -130,8 +141,6 @@ namespace Contact_Registry
                         }
 
                     }
-
-
                 }
 
 
@@ -146,7 +155,77 @@ namespace Contact_Registry
 
         private void bEdit_Click(object sender, RoutedEventArgs e)
         {
+            if (dGrid.SelectedIndex != -1)
+            {
+                DataRowView drv = (DataRowView)dGrid.SelectedItem; //Gets selected Item
 
+                string editName = drv[0].ToString().Trim();
+                string editSurname = drv[1].ToString().Trim();
+                string editCompany = drv[2].ToString().Trim();
+                string editPhone = drv[3].ToString().Trim();
+                string editMail = drv[4].ToString().Trim();
+                string editTitle = drv[5].ToString().Trim();
+
+                string Connection = "server= .\\SQLEXPRESS; Integrated Security = True";
+
+                using (var sc = new SqlConnection(Connection))
+                {
+                    using (var cmd = sc.CreateCommand())
+                    {
+                        try
+                        {
+                            sc.Open();
+                            cmd.CommandText = @"USE ContactRegistry;
+                                      SELECT * FROM CONTACTS WHERE
+                                      Contact_FirstName =@editName AND
+                                      Contact_Surname =@editSurname AND
+                                      Contact_Company =@editCompany AND
+                                      Contact_Phone =@editPhone AND
+                                      Contact_Mail =@editMail AND
+                                      Contact_Title =@editTitle;";
+
+                            cmd.Parameters.AddWithValue("@editName", editName);
+                            cmd.Parameters.AddWithValue("@editSurname", editSurname);
+                            cmd.Parameters.AddWithValue("@editCompany", editCompany);
+                            cmd.Parameters.AddWithValue("@editPhone", editPhone);
+                            cmd.Parameters.AddWithValue("@editMail", editMail);
+                            cmd.Parameters.AddWithValue("@editTitle", editTitle);
+                            cmd.ExecuteNonQuery();
+
+
+
+
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    CR_EditContact objCR_EditContact = new CR_EditContact(); //Populate Edit Contact form
+                                    objCR_EditContact.tbName.Text = reader["Contact_FirstName"].ToString();
+                                    objCR_EditContact.tbSurname.Text = reader["Contact_Surname"].ToString();
+                                    objCR_EditContact.tbCompany.Text = reader["Contact_Company"].ToString();
+                                    objCR_EditContact.tbPhone.Text = reader["Contact_Phone"].ToString();
+                                    objCR_EditContact.tbMail.Text = reader["Contact_Mail"].ToString();
+                                    objCR_EditContact.tbTitle.Text = reader["Contact_Title"].ToString();
+                                    objCR_EditContact.Show();
+
+                                }
+                            }
+                                sc.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                    }
+                }
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("You must select a user to edit!");
+            }
+            
         }
     }
 }

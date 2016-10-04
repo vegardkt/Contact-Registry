@@ -30,7 +30,7 @@ namespace Contact_Registry
             InitializeComponent();
         }
 
-        private void bLogin_Click_1(object sender, RoutedEventArgs e)
+        private void bLogin_Click(object sender, RoutedEventArgs e)
         {
             if (tbUserName.Text == "" || passwordBox.Password == "")
             {
@@ -78,5 +78,9 @@ namespace Contact_Registry
             }
         }
 
+        private void bExit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
     }
 }
