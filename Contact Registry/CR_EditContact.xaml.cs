@@ -115,7 +115,7 @@ namespace Contact_Registry
                         cmd.Parameters.AddWithValue("@n_editTitle", tbTitle.Text.Trim());
                         
                         cmd.ExecuteNonQuery();
-
+                        sc.Close();
                         this.Hide();
                         CR_MainInterface fm = new CR_MainInterface();
                         fm.Show();

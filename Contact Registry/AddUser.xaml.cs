@@ -23,17 +23,7 @@ namespace Contact_Registry
     public partial class AddUser : Window
     {
 
-        string Connection = "server= .\\SQLEXPRESS; Integrated Security = True";
-        string Query = @"Use ContactRegistry; 
-                            INSERT INTO CONTACTS(Contact_ID,Contact_Firstname,Contact_Surname,Contact_Company,Contact_Phone,Contact_Mail,Contact_Title) 
-                            VALUES(
-                            '@Contact_ID',
-                            '@Contact_FirstName',
-                            '@Contact_Surname',
-                            '@Contact_Company',
-                            '@Contact_Phone',
-                            '@Contact_Mail',
-                            '@Contact_Title')";
+        public string currentMaxID;
 
         public AddUser()
         {
@@ -50,33 +40,72 @@ namespace Contact_Registry
 
         private void bAddUser_Click(object sender, RoutedEventArgs e)
         {
-            try
+            string Connection = "server= .\\SQLEXPRESS; Integrated Security = True";
+            using (var sc = new SqlConnection(Connection))
             {
-                SqlConnection mySQLConnection = new SqlConnection(Connection); //Create Connection
-                SqlCommand cmd = new SqlCommand(Query, mySQLConnection); //Create Query
-
-                cmd.Parameters.AddWithValue("@Contact_ID", tbName.Text);
-                cmd.Parameters.AddWithValue("@Contact_FirstName", tbName.Text);
-                cmd.Parameters.AddWithValue("@Contact_Surname", tbSurname.Text);
-                cmd.Parameters.AddWithValue("@Contact_Company", tbCompany.Text);
-                cmd.Parameters.AddWithValue("@Contact_Phone", tbPhone.Text);
-                cmd.Parameters.AddWithValue("@Contact_Mail", tbMail.Text);
-                cmd.Parameters.AddWithValue("@Contact_Title", tbTitle.Text);
-
-                mySQLConnection.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                MessageBox.Show("Contact Added!");
-
-                if (Debugger.IsAttached)
+                using (var maxCmd = sc.CreateCommand())
                 {
-                    Console.ReadLine();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+                    try
+                    {
+                        sc.Open();
+                        maxCmd.CommandText = @"USE ContactRegistry; SELECT MAX(Contact_ID) AS Contact_ID FROM CONTACTS;";
 
+                        using (var reader = maxCmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                currentMaxID = reader["Contact_ID"].ToString().Trim();
+                            }
+                        }
+                        //sc.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                using (var addCmd = sc.CreateCommand())
+                {
+                    try
+                    {
+                        //sc.Open();
+                        addCmd.CommandText = @" 
+                            INSERT INTO CONTACTS(Contact_ID,Contact_FirstName,Contact_Surname,Contact_Company,Contact_Phone,Contact_Mail,Contact_Title) 
+                            VALUES(
+                            @Contact_ID,
+                            @Contact_FirstName,
+                            @Contact_Surname,
+                            @Contact_Company,
+                            @Contact_Phone,
+                            @Contact_Mail,
+                            @Contact_Title)";
+
+
+
+                        addCmd.Parameters.AddWithValue("@Contact_ID", (Convert.ToInt16(currentMaxID) + 1).ToString());
+                        addCmd.Parameters.AddWithValue("@Contact_FirstName", tbName.Text.Trim());
+                        addCmd.Parameters.AddWithValue("@Contact_Surname", tbSurname.Text.Trim());
+                        addCmd.Parameters.AddWithValue("@Contact_Company", tbCompany.Text.Trim());
+                        addCmd.Parameters.AddWithValue("@Contact_Phone", tbPhone.Text.Trim());
+                        addCmd.Parameters.AddWithValue("@Contact_Mail", tbMail.Text.Trim());
+                        addCmd.Parameters.AddWithValue("@Contact_Title", tbTitle.Text.Trim());
+
+                        
+
+                        addCmd.ExecuteNonQuery();
+
+                        sc.Close();
+
+                        this.Hide();
+                        CR_MainInterface fm = new CR_MainInterface();
+                        fm.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }                      
+            }                   
         }
     }
 }

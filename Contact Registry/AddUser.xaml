@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="AddUser" Height="300" Width="300">
     <Grid>
-        <Button x:Name="bAddUser" Content="Add" HorizontalAlignment="Left" Margin="50,230,0,0" VerticalAlignment="Top" Width="75" Click="bAddUser_Click"/>
-        <Button x:Name="bCancel" Content="Cancel" HorizontalAlignment="Left" Margin="151,230,0,0" VerticalAlignment="Top" Width="75" Click="bCancel_Click"/>
+        <Button x:Name="bAddUser" Content="Add" HorizontalAlignment="Left" Margin="50,230,0,0" VerticalAlignment="Top" Width="75" Click="bAddUser_Click" IsDefault="True"/>
+        <Button x:Name="bCancel" Content="Cancel" HorizontalAlignment="Left" Margin="151,230,0,0" VerticalAlignment="Top" Width="75" Click="bCancel_Click" IsCancel="True"/>
         <TextBlock x:Name="tName" HorizontalAlignment="Left" Margin="30,20,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
         <TextBox x:Name="tbName" HorizontalAlignment="Left" Height="23" Margin="130,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="tSurname" HorizontalAlignment="Left" Margin="30,50,0,0" TextWrapping="Wrap" Text="Surname:" VerticalAlignment="Top"/>
